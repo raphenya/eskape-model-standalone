@@ -22,13 +22,20 @@ Models were trained on in-house growth inhibition screening datasets against com
 
 The tool requires Python >= 3.10 and conda >= 4.12.0. The latest release can be installed directly from pip or this repository.
 
+# Create a virtual environment
+
+```
+python3 -m venv test_env
+source test_env/bin/activate
+```
 
 # Install eskape_model using tarball
 
 Install the `eskape_model` application within the created `eskape_model` python environment using a tarball.
 
+
 ```
-python3 -m pip install /path/to/eskape_model-1.0.0.tar.gz
+(test_env) amos@Amogelangs-MacBook-Pro % python3 -m pip install /path/to/eskape_model-1.0.0.tar.gz
 ```
 
 # Dependencies
@@ -39,13 +46,6 @@ The following are required dependencies (listed below):
 - chemfunc version 1.0.10 - https://github.com/swansonk14/chemfunc.git
 
 # Install dependencies
-
-## create a virtual environment
-
-```
-python3 -m venv test_env
-source test_env/bin/activate
-```
 
 ## install chemprop v1.6.1
 
@@ -68,15 +68,15 @@ pip install -e .
 ## cleanup chemprop and chemfunc
 
 ```
-rm -r chemfunc-v_1.0.10/
-rm -r chemprop-1.6.1/
+(test_env) amos@Amogelangs-MacBook-Pro % rm -r chemfunc-v_1.0.10/
+(test_env) amos@Amogelangs-MacBook-Pro % rm -r chemprop-1.6.1/
 ```
 
 ## install specific scikit-learn and numpy
 
 ```
-pip install scikit-learn==1.3.2
-pip install numpy==1.26.4
+(test_env) amos@Amogelangs-MacBook-Pro % pip install scikit-learn==1.3.2
+(test_env) amos@Amogelangs-MacBook-Pro % pip install numpy==1.26.4
 ```
 
 ## test functions
@@ -99,7 +99,7 @@ mv models db
 The tree structure of db should look like so:
 
 ```
-amos@Amogelangs-MacBook-Pro db % tree -L 3
+(test_env) amos@Amogelangs-MacBook-Pro db % tree -L 3
 .
 ├── cannonical_data
 │   └── training_data_canonical.csv
