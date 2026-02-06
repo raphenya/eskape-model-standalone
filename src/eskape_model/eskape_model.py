@@ -42,61 +42,6 @@ logger.addHandler(stream_handler)
 logger.addHandler(file_handler)
 
 
-def add_request_for_api(absolute_path, status):
-    pass
-    # cur.execute("""SELECT max(id) FROM api""")
-    # max_id = cur.fetchone()
-    # if max_id[0] is None:
-    #     next_api_id = 1
-    # else:
-    #     next_api_id = int(max_id[0]) + 1
-    # now = datetime.now()
-    # try:
-    #     cur.execute("""INSERT INTO api(id, session, absolute_path, function_type, response, created_at, ip, geo_area_name, geo_area_code, downloaded, status) VALUES('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') RETURNING id;""" %
-    #                 (next_api_id, sys.argv[5], absolute_path, sys.argv[1], 'response', now, 'ip', 'geo_area_name', 999, 0, status))
-    #     ip_id = cur.fetchone()[0]
-    # except psycopg2.Error as e:
-    #     # print('Error: inserting into table api', e) # TODO: save to log file
-    #     con.rollback()
-    #     sys.exit(1)
-    # else:
-    #     # print("Success adding to api") # TODO: save to log file
-    #     con.commit()
-
-
-def save_response():
-    pass
-    # # get saved json
-    # # data = ""
-    # # with open(sys.argv[4]) as f:
-    # #     data = json.load(f)
-    # try:
-    #     cur.execute("""UPDATE api SET response = '%s' WHERE session = '%s'""" % (
-    #         sys.argv[3], sys.argv[2]))
-    # except psycopg2.Error as e:
-    #     # print('Error: updating table api', e) # TODO: save to log file
-    #     con.rollback()
-    #     sys.exit(1)
-    # else:
-    #     con.commit()
-
-
-def get_results():
-    pass
-    # results = {}
-    # try:
-    #     cur.execute(
-    #         """SELECT response FROM api WHERE session = '%s'""" % (sys.argv[2]))
-    #     results = cur.fetchone()[0]
-    # except psycopg2.Error as e:
-    #     # print('Error: getting results from table api', e) # TODO: save to log file
-    #     con.rollback()
-    #     sys.exit(1)
-    # else:
-    #     con.commit()
-    # print(results)
-
-
 def run_random_forest_models(test_path, checkpoint_dir, preds_path):
     logger.info("run_random_forest_models ...")
     try:
@@ -148,27 +93,6 @@ def run_chemprop_rdkit_models(test_path, checkpoint_dir, preds_path):
         return False
 
 
-def download_file():
-    # logger.setLevel(10)
-    # filter results and re-write -final.tsv
-    # logger.info("filter_results_tabular ...")
-    # logger.info(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5],
-    #             sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9], sys.argv[10], sys.argv[11])
-    filter_results_tabular(sys.argv[3], sys.argv[4], sys.argv[5],
-                           sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9], sys.argv[10], sys.argv[11], sys.argv[12])
-
-    # try:
-    #     cur.execute(
-    #         """UPDATE api SET downloaded = '%s' WHERE session = '%s'""" % (1, sys.argv[2]))
-    # except psycopg2.Error as e:
-    #     logger.error('Error: updating table api, %s', e)
-    #     con.rollback()
-    #     sys.exit(1)
-    # else:
-    #     con.commit()
-    # print("OK")
-
-
 def get_cannonical_data(f1, f2, f3):
     # reading two csv files
     data1 = pd.read_csv(f1)
@@ -183,13 +107,6 @@ def get_cannonical_data(f1, f2, f3):
 
     # output
     output.to_csv(f"{f3}-validated.txt", index=False)
-
-
-def validate_smiles(f):
-    # logger.setLevel(10)
-    # logger.info("filename: %s", f)
-    # print(f"File {f} not processed properly")
-    return True
 
 
 def predict_function(args):
