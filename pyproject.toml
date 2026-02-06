@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eskape_model"
+description = "The ESKAPE Model is a machine learning-based online resource to facilitate discovery of novel antibiotics against the ESKAPE pathogens."
+version = "1.0.0"
+dependencies = [
+  "joblib",
+  "biopython"
+]
+authors = [
+  { name="Amogelang R. Raphenya", email="raphenar@mcmaster.ca" },
+]
+maintainers = [
+  {name = "Amogelang R. Raphenya", email = "raphenar@mcmaster.ca"}
+]
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+keywords = ["antibiotics","discovery","ESKAPE", "pathogens","machine learning"]
+
+[project.scripts]
+eskape_model = "eskape_model:eskape_model.main"
+
+[project.urls]
+Homepage = "https://github.com/raphenya/eskape-model-standalone"
+Issues = "https://github.com/raphenya/eskape-model-standalone/issues"
+
+[tool.setuptools]
+include-package-data = true

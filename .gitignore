@@ -1,0 +1,27 @@
+# general things to ignore
+build/
+dist/
+*.egg-info/
+*.egg
+*.py[cod]
+__pycache__/
+*.so
+*~
+
+# testing files
+test_env/
+build-install.sh
+BUILD.md
+run-test.sh
+input.txt
+db/
+bak/
+output/
+eskape-app.log
+
+# twine
+.pypirc
+
+# due to using tox and pytest
+.tox
+.cache
