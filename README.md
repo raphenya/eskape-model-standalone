@@ -1,6 +1,6 @@
 # The ESKAPE Model Standalone
 
-This repository provides a stanalone application to the web version of ESKAPE Model at eskape.mcmaster.ca. The ESKAPE Model is a machine learning-based online resource to facilitate discovery of novel antibiotics against the ESKAPE pathogens, a group of multidrug-resistant bacteria that are responsible for the majority of hospital-acquired infections. 
+This repository provides a standalone application to the web version of ESKAPE Model at eskape.mcmaster.ca. The ESKAPE Model is a machine learning-based online resource to facilitate discovery of novel antibiotics against the ESKAPE pathogens, a group of multidrug-resistant bacteria that are responsible for the majority of hospital-acquired infections. 
 
 The ESKAPE Model predicts the antibacterial activity of inputted molecules against each of the following ESKAPE pathogens:
 
