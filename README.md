@@ -20,7 +20,7 @@ Models were trained on in-house growth inhibition screening datasets against com
 
 # Installation
 
-The tool requires Python >= 3.10 and conda >= 4.12.0. The latest release can be installed directly from pip or this repository.
+The tool requires Python 3.10. The latest release can be installed directly from pip or this repository.
 
 # Create a virtual environment
 
@@ -52,8 +52,7 @@ The following are required dependencies (listed below):
 ```
 wget https://github.com/chemprop/chemprop/archive/refs/tags/v1.6.1.tar.gz
 tar xvf v1.6.1.tar.gz
-cd chemprop-1.6.1
-pip install -e .
+python3 -m pip install v1.6.1.tar.gz
 ```
 
 ## install chemfunc v_1.0.10
@@ -61,8 +60,7 @@ pip install -e .
 ```
 wget https://github.com/swansonk14/chemfunc/archive/refs/tags/v_1.0.10.tar.gz
 tar xvf v_1.0.10.tar.gz
-cd chemfunc-v_1.0.10
-pip install -e .
+python3 -m pip install v_1.0.10.tar.gz
 ```
 
 ## cleanup chemprop and chemfunc
@@ -90,11 +88,9 @@ pip install -e .
 
 # Download ESKAPE model models from eskape.mcmaster.ca or GitHub
 
-```
-wget /path/to/models
-tar xvf models.1.0.0.tar.gz
-mv models db
-```
+Please download the models and training data at [GitHub](https://github.com/arnolp3/The-ESKAPE-Model).
+
+Create a directory `db` with two sub-directories `cannonical_data` and `models`. From the downloaded models data, add `training_data_canonical.csv` to `db/cannonical_data/` directory. Add all models to directory `db/models/all/`.
 
 The tree structure of db should look like so:
 
