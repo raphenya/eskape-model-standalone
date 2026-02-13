@@ -51,7 +51,6 @@ The following are required dependencies (listed below):
 
 ```
 wget https://github.com/chemprop/chemprop/archive/refs/tags/v1.6.1.tar.gz
-tar xvf v1.6.1.tar.gz
 python3 -m pip install v1.6.1.tar.gz
 ```
 
@@ -59,7 +58,6 @@ python3 -m pip install v1.6.1.tar.gz
 
 ```
 wget https://github.com/swansonk14/chemfunc/archive/refs/tags/v_1.0.10.tar.gz
-tar xvf v_1.0.10.tar.gz
 python3 -m pip install v_1.0.10.tar.gz
 ```
 
