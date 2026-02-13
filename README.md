@@ -114,7 +114,6 @@ The tree structure of db should look like so:
         ├── KP_chemprop
         ├── KP_rdkit
         ├── KP_rf
-        ├── KP_rf_bak
         ├── PA_chemprop
         ├── PA_rdkit
         ├── PA_rf
