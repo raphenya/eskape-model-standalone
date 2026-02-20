@@ -20,13 +20,13 @@ Models were trained on in-house growth inhibition screening datasets against com
 
 # Installation
 
-The tool requires Python 3.10. The latest release can be installed directly from pip or this repository.
+The tool requires Python 3.10.
 
 # Create a virtual environment
 
 ```
-python3 -m venv test_env
-source test_env/bin/activate
+python3 -m venv eskape_env
+source eskape_env/bin/activate
 ```
 
 # Install eskape_model using tarball
@@ -35,7 +35,7 @@ Install the `eskape_model` application within the created `eskape_model` python 
 
 
 ```
-(test_env) amos@Amogelangs-MacBook-Pro % python3 -m pip install /path/to/eskape_model-1.0.0.tar.gz
+(eskape_env) amos@Amogelangs-MacBook-Pro % python3 -m pip install /path/to/eskape_model-1.0.0.tar.gz
 ```
 
 # Dependencies
@@ -61,27 +61,20 @@ wget https://github.com/swansonk14/chemfunc/archive/refs/tags/v_1.0.10.tar.gz
 python3 -m pip install v_1.0.10.tar.gz
 ```
 
-## cleanup chemprop and chemfunc
-
-```
-(test_env) amos@Amogelangs-MacBook-Pro % rm -r chemfunc-v_1.0.10/
-(test_env) amos@Amogelangs-MacBook-Pro % rm -r chemprop-1.6.1/
-```
-
 ## install specific scikit-learn and numpy
 
 ```
-(test_env) amos@Amogelangs-MacBook-Pro % pip install scikit-learn==1.3.2
-(test_env) amos@Amogelangs-MacBook-Pro % pip install numpy==1.26.4
+(eskape_env) amos@Amogelangs-MacBook-Pro % pip install scikit-learn==1.3.2
+(eskape_env) amos@Amogelangs-MacBook-Pro % pip install numpy==1.26.4
 ```
 
 ## test functions
 
 ```
-(test_env) amos@Amogelangs-MacBook-Pro % chemprop_predict -h
-(test_env) amos@Amogelangs-MacBook-Pro % sklearn_predict -h
-(test_env) amos@Amogelangs-MacBook-Pro % chemfunc -h
-(test_env) amos@Amogelangs-MacBook-Pro % eskape_model -h
+(eskape_env) amos@Amogelangs-MacBook-Pro % chemprop_predict -h
+(eskape_env) amos@Amogelangs-MacBook-Pro % sklearn_predict -h
+(eskape_env) amos@Amogelangs-MacBook-Pro % chemfunc -h
+(eskape_env) amos@Amogelangs-MacBook-Pro % eskape_model -h
 ```
 
 # Download ESKAPE model models from eskape.mcmaster.ca or GitHub
@@ -93,7 +86,7 @@ Create a directory `db` with two sub-directories `cannonical_data` and `models`.
 The tree structure of db should look like so:
 
 ```
-(test_env) amos@Amogelangs-MacBook-Pro db % tree -L 3
+(eskape_env) amos@Amogelangs-MacBook-Pro db % tree -L 3
 .
 ├── cannonical_data
 │   └── training_data_canonical.csv
@@ -126,7 +119,7 @@ The tree structure of db should look like so:
 # run eskape_model
 
 ```
-(test_env) amos@Amogelangs-MacBook-Pro % eskape_model \
+(eskape_env) amos@Amogelangs-MacBook-Pro % eskape_model \
 --input_file input.txt \
 --output_directory output \
 --models_directory db \
