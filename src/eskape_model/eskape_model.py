@@ -93,7 +93,7 @@ def run_chemprop_rdkit_models(test_path, checkpoint_dir, preds_path):
         return False
 
 
-def get_cannonical_data(f1, f2, f3):
+def get_canonical_data(f1, f2, f3):
     # reading two csv files
     data1 = pd.read_csv(f1)
     data2 = pd.read_csv(f2)
@@ -146,7 +146,7 @@ def predict_function(args):
 
     # calculate TNN (Tanimoto nearest neighbour) metric
     # TNN script: https://github.com/swansonk14/chemfunc/blob/main/src/chemfunc/nearest_neighbor.py
-    reference_path = base_directory+"/cannonical_data/training_data_canonical.csv"
+    reference_path = base_directory+"/canonical_data/training_data_canonical.csv"
     result = subprocess.run(
         f"{path_to_chemfunc} nearest_neighbor --data_path {test_path} --save_path {preds_path}-nearest-neighbor.txt --metric tanimoto --reference_smiles_column smiles --reference_data_path {reference_path} > /dev/null 2>&1", shell=True, check=True)
 
@@ -175,8 +175,8 @@ def predict_function(args):
     if result.returncode == 0:
         logger.info("Success")
         # parse the input canonical and match-up to training canonical smiles
-        get_cannonical_data(base_directory+"/cannonical_data/training_data_canonical.csv",
-                            f"{preds_path}-canonical.txt", preds_path)
+        get_canonical_data(base_directory+"/canonical_data/training_data_canonical.csv",
+                           f"{preds_path}-canonical.txt", preds_path)
     else:
         logger.error(
             f"File {test_path} failed for 'chemfunc canonicalize_smiles' funcion")
@@ -279,7 +279,7 @@ def get_validated(o_f_path, accession, smile):
         for row in reader:
             if row[0] != "smiles":
                 if row[8] == smile:
-                    return {"cannonical_smiles": row[0],
+                    return {"canonical_smiles": row[0],
                             "EF": str_to_float(row[1]),
                             "SA": str_to_float(row[2]),
                             "KP": str_to_float(row[3]),

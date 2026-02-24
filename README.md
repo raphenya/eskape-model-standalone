@@ -81,14 +81,14 @@ python3 -m pip install v_1.0.10.tar.gz
 
 Please download the models and training data at [GitHub](https://github.com/arnolp3/The-ESKAPE-Model).
 
-Create a directory `db` with two sub-directories `cannonical_data` and `models`. From the downloaded models data, add `training_data_canonical.csv` to `db/cannonical_data/` directory. Add all models to directory `db/models/all/`.
+Create a directory `db` with two sub-directories `canonical_data` and `models`. From the downloaded models data, add `training_data_canonical.csv` to `db/canonical_data/` directory. Add all models to directory `db/models/all/`.
 
 The tree structure of db should look like so:
 
 ```
 (eskape_env) amos@Amogelangs-MacBook-Pro db % tree -L 3
 .
-├── cannonical_data
+├── canonical_data
 │   └── training_data_canonical.csv
 └── models
     └── all
