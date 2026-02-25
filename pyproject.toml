@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "eskape_model"
 description = "The ESKAPE Model is a machine learning-based online resource to facilitate discovery of novel antibiotics against the ESKAPE pathogens."
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
   "joblib",
   "biopython",

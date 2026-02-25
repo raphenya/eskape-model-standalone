@@ -23,7 +23,7 @@ jobs:
     - name: Build
       run: python -m build
     - name: Publish package distributions to PyPI
-      uses: pypa/gh-action-pypi-publish@8a08d616893759ef8e1aa1f2785787c0b97e20d6
+      uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e
       with:
         skip-existing: true
         verbose: true
