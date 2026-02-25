@@ -13,7 +13,9 @@ import glob
 import pandas as pd
 import operator
 import argparse
+from importlib.metadata import version
 
+__version__ = version("eskape_model")
 
 # explicit paths to chemprop_predict and sklearn_predict
 path_to_chemprop_predict = shutil.which("chemprop_predict")
@@ -580,7 +582,7 @@ def parse_results(path):
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="eskape_model", description="standalone")
+        prog="eskape_model", description=f"standalone - version {__version__}")
     parser.add_argument('-i', '--input_file', dest="input_file",
                         help="input csv file with SMILES, with header 'smiles'")
     parser.add_argument('-m', '--models_directory', dest="models_directory",
@@ -589,6 +591,8 @@ def main():
                         help="path to save results")
     parser.add_argument('--debug', dest="debug",
                         action="store_true", help="debug mode")
+    parser.add_argument('-v', '--version',
+                        action="version", version=__version__)
 
     if len(sys.argv) == 1:
         sys.stderr.write("No arguments provided, printing help menu ...\n")

@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "eskape_model"
 description = "The ESKAPE Model is a machine learning-based online resource to facilitate discovery of novel antibiotics against the ESKAPE pathogens."
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
   "joblib",
   "biopython",
@@ -21,7 +21,8 @@ maintainers = [
   {name = "Amogelang R. Raphenya", email = "raphenar@mcmaster.ca"}
 ]
 readme = "README.md"
-license = {file = "LICENSE.txt"}
+license = "MIT"
+license-files = ["LICENSE.txt"]
 requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
