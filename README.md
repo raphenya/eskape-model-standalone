@@ -29,6 +29,16 @@ python3 -m venv eskape_env
 source eskape_env/bin/activate
 ```
 
+# Install eskape_model using pip
+
+The latest release can be installed directly from pip or this repository which will also install the dependencies `chemprop` and `chemfunc`.
+
+```
+pip install eskape_model
+```
+
+Or
+
 # Install eskape_model using tarball
 
 Install the `eskape_model` application within the created `eskape_model` python environment using a tarball.

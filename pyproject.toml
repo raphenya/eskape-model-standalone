@@ -8,7 +8,11 @@ description = "The ESKAPE Model is a machine learning-based online resource to f
 version = "1.0.0"
 dependencies = [
   "joblib",
-  "biopython"
+  "biopython",
+  "chemprop==1.6.1",
+  "chemfunc==1.0.10",
+  "scikit-learn==1.3.2",
+  "numpy==1.26.4"
 ]
 authors = [
   { name="Amogelang R. Raphenya", email="raphenar@mcmaster.ca" },

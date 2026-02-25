@@ -127,7 +127,8 @@ def predict_function(args):
     except Exception as e:
         logger.info(f"Folder {path} is already there: {e}")
     else:
-        logger.info(f"Folder '{path}' was created")
+        # logger.info(f"Folder '{path}' was created")
+        pass
 
     # input SMILES to predict on
     test_path = args.input_file
