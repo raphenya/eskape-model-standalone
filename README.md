@@ -152,7 +152,7 @@ The tree structure of db should look like so:
 ```
 
 
-# run eskape_model
+# Run eskape_model
 
 ```
 (eskape_env) amos@Amogelangs-MacBook-Pro % eskape_model \
