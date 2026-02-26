@@ -46,7 +46,7 @@ Note: Predictions on 1 molecule takes ~2 minutes. Predictions on 100 molecules t
 
 # Installation
 
-The tool requires Python 3.10. Python versions more recent than 3.10 have been tested and do not work. Installation takes ~5 minutes.
+The tool requires at least Python 3.10. Installation takes ~5 minutes.
 
 # Create a virtual environment
 
@@ -57,21 +57,10 @@ source eskape_env/bin/activate
 
 # Install eskape_model using pip
 
-The latest release can be installed directly from pip or this repository which will also install the dependencies `chemprop` and `chemfunc`.
+The latest release can be installed directly from pip which will also install the dependencies `chemprop` and `chemfunc`.
 
 ```
-pip install eskape_model
-```
-
-Or
-
-# Install eskape_model using tarball
-
-Install the `eskape_model` application within the created `eskape_model` python environment using a tarball.
-
-
-```
-(eskape_env) amos@Amogelangs-MacBook-Pro % python3 -m pip install /path/to/eskape_model-1.0.0.tar.gz
+pip install eskape_model==1.0.3
 ```
 
 # Dependencies
@@ -80,37 +69,20 @@ The following are required dependencies (listed below):
 
 - chemprop version 1.6.1 - https://github.com/chemprop/chemprop.git
 - chemfunc version 1.0.10 - https://github.com/swansonk14/chemfunc.git
+- scikit-learn==1.3.2
+- numpy==1.26.4
+- torch==2.2.2
 
-# Install dependencies
-
-## install chemprop v1.6.1
-
-```
-wget https://github.com/chemprop/chemprop/archive/refs/tags/v1.6.1.tar.gz
-python3 -m pip install v1.6.1.tar.gz
-```
-
-## install chemfunc v_1.0.10
-
-```
-wget https://github.com/swansonk14/chemfunc/archive/refs/tags/v_1.0.10.tar.gz
-python3 -m pip install v_1.0.10.tar.gz
-```
-
-## install specific scikit-learn and numpy
-
-```
-(eskape_env) amos@Amogelangs-MacBook-Pro % pip install scikit-learn==1.3.2
-(eskape_env) amos@Amogelangs-MacBook-Pro % pip install numpy==1.26.4
-```
 
 ## test functions
 
+Run test commands inside the created environment (`eskape_env`):
+
 ```
-(eskape_env) amos@Amogelangs-MacBook-Pro % chemprop_predict -h
-(eskape_env) amos@Amogelangs-MacBook-Pro % sklearn_predict -h
-(eskape_env) amos@Amogelangs-MacBook-Pro % chemfunc -h
-(eskape_env) amos@Amogelangs-MacBook-Pro % eskape_model -h
+chemprop_predict -h
+sklearn_predict -h
+chemfunc -h
+eskape_model -h
 ```
 
 # Download ESKAPE model models from eskape.mcmaster.ca or GitHub
@@ -154,8 +126,10 @@ The tree structure of db should look like so:
 
 # Run eskape_model
 
+Run example command inside the created environment (`eskape_env`):
+
 ```
-(eskape_env) amos@Amogelangs-MacBook-Pro % eskape_model \
+eskape_model \
 --input_file input.txt \
 --output_directory output \
 --models_directory db \
