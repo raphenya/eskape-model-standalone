@@ -5,14 +5,15 @@ build-backend = "hatchling.build"
 [project]
 name = "eskape_model"
 description = "The ESKAPE Model is a machine learning-based online resource to facilitate discovery of novel antibiotics against the ESKAPE pathogens."
-version = "1.0.2"
+version = "1.0.3"
 dependencies = [
   "joblib",
   "biopython",
   "chemprop==1.6.1",
   "chemfunc==1.0.10",
   "scikit-learn==1.3.2",
-  "numpy==1.26.4"
+  "numpy==1.26.4",
+  "torch==2.2.2"
 ]
 authors = [
   { name="Amogelang R. Raphenya", email="raphenar@mcmaster.ca" },
