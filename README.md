@@ -40,7 +40,7 @@ Results are outputted as a TSV file containing the following:
 
 While all models were trained on the same datasets using the same training scheme, the three model types differ in terms of architecture and molecular representation. Prediction scores for the same molecule and pathogen will therefore vary based on the model type. Note that prediction scores do not correlate directly with likelihood of activity or potency, but rather represent model confidence.
 
-###Runtime:
+### Runtime:
 
 Note: Predictions on 1 molecule takes ~2 minutes. Predictions on 100 molecules takes ~3.5 minutes.
 
