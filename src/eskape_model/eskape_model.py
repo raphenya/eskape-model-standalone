@@ -43,6 +43,9 @@ file_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 logger.addHandler(file_handler)
 
+VALID_PATHOGENS = ["AB", "BW", "DKO", "EF", "KP", "PA", "SA"]
+VALID_MODELS = ["rf", "chemprop", "rdkit"]
+
 
 def run_random_forest_models(test_path, checkpoint_dir, preds_path):
     """ 
@@ -151,6 +154,12 @@ def predict_function(args):
     logger.info(f"path_to_sklearn_predict: {path_to_sklearn_predict}")
     logger.info(f"path_to_chemfunc: {path_to_chemfunc}")
 
+    # pathogen and model selection
+    if args.pathogen_list:
+        logger.info(f"Selected pathogens: {args.pathogen_list}")
+    if args.model_list:
+        logger.info(f"Selected models: {args.model_list}")
+
     path, filename = os.path.split(args.input_file)
     # logger.info(f"path: {path}")
     # logger.info(f"filename: {filename}")
@@ -221,7 +230,8 @@ def predict_function(args):
     # run in parallel
     try:
 
-        results = process_jobs(test_path, base_directory, preds_path)
+        results = process_jobs(
+            test_path, base_directory, preds_path, args.pathogen_list, args.model_list)
 
         if results == 0:
             logger.info("Done.")
@@ -234,6 +244,26 @@ def predict_function(args):
     except Exception as e:
         print(f"Unexpected {e=}, {type(e)=}")
         logger.error(f"{e}")
+
+
+def launch_job_single(test_path, base_directory, preds_path, pathogen, select_model):
+    """
+
+    This function runs the selected model for the given pathogen. The predictions are saved in a 
+    CSV file with the name "{preds_path}-{pathogen}_{model}.csv".
+
+    """
+
+    if select_model:
+        if select_model == "rdkit":
+            run_chemprop_rdkit_models(
+                f"{test_path}", f"{base_directory}/models/all/{pathogen}_rdkit", f"{preds_path}-{pathogen}_rdkit.csv")
+        elif select_model == "chemprop":
+            run_chemprop_models(
+                f"{test_path}", f"{base_directory}/models/all/{pathogen}_chemprop", f"{preds_path}-{pathogen}_chemprop.csv")
+        elif select_model == "rf":
+            run_random_forest_models(
+                f"{test_path}", f"{base_directory}/models/all/{pathogen}_rf", f"{preds_path}-{pathogen}_rf.csv")
 
 
 def launch_job(test_path, base_directory, preds_path, pathogen):
@@ -276,29 +306,38 @@ def worker(test_path, base_directory, preds_path):
     launch_job(test_path, base_directory, preds_path, "SA")
 
 
-def process_jobs(test_path, base_directory, preds_path):
+def process_jobs(test_path, base_directory, preds_path, pathogen_list, model_list):
     """
 
     This function launches the prediction jobs for each pathogen in parallel using multiprocessing. 
 
     """
-
-    try:
-        main_thread = multiprocessing.Process(target=worker, args=(
-            f"{test_path}", f"{base_directory}", f"{preds_path}",))
-        main_thread.run()
-        main_thread.join()
-        return main_thread.exitcode
-    except Exception as e:
-        if main_thread.exitcode is None:
-            parse_results(f"{preds_path}")
-            logger.info("analysis complete.")
-            return 0
-        else:
-            # exit unsuccessfully
-            logger.error("analysis failed.")
-            print(f"exit unsuccessfully, {e}")
-            return 1
+    if pathogen_list and model_list:
+        for pathogen in pathogen_list:
+            for model in model_list:
+                logger.info(f"Processing {pathogen} with model {model}")
+                launch_job_single(test_path, base_directory,
+                                  preds_path, pathogen, model)
+        parse_results(f"{preds_path}")
+        logger.info("analysis complete.")
+        return 0
+    else:
+        try:
+            main_thread = multiprocessing.Process(target=worker, args=(
+                f"{test_path}", f"{base_directory}", f"{preds_path}",))
+            main_thread.run()
+            main_thread.join()
+            return main_thread.exitcode
+        except Exception as e:
+            if main_thread.exitcode is None:
+                parse_results(f"{preds_path}")
+                logger.info("analysis complete.")
+                return 0
+            else:
+                # exit unsuccessfully
+                logger.error("analysis failed.")
+                print(f"exit unsuccessfully, {e}")
+                return 1
 
 
 def get_properties(o_f_path, accession, smile):
@@ -387,7 +426,6 @@ def get_sum_ppfs(smile, j):
                 top_score = dict(sorted(j[i][smile][model_type].items(
                 ), key=operator.itemgetter(1), reverse=True)[:7])
                 l = list(top_score.values())
-                [str_to_float(x) for x in l]
                 results[i][f"sum_{model_type}"] = sum(l)
                 try:
                     results[i][f"ppf_{model_type}"] = l[0] / l[1]
@@ -600,26 +638,24 @@ def parse_results(path):
                         if len(results[accession]) == 0:
                             results[accession] = {
                                 row[0]: {
-                                    "rf": {"DKO": "", "SA": "", "PA": "", "EF": "", "BW": "", "KP": "", "AB": ""},
-                                    "chemprop": {"DKO": "", "SA": "", "PA": "", "EF": "", "BW": "", "KP": "", "AB": ""},
-                                    "rdkit": {"DKO": "", "SA": "", "PA": "", "EF": "", "BW": "", "KP": "", "AB": ""},
-                                    "validated": {"DKO": "", "SA": "", "PA": "", "EF": "", "BW": "", "KP": "", "AB": ""},
-                                    "molweight": "",
-                                    "clogp": "",
-                                    "tanimoto_nearest_neighbor": "",
-                                    "tanimoto_nearest_neighbor_similarity": ""
+                                    "rf": {"DKO": 0.0, "SA": 0.0, "PA": 0.0, "EF": 0.0, "BW": 0.0, "KP": 0.0, "AB": 0.0},
+                                    "chemprop": {"DKO": 0.0, "SA": 0.0, "PA": 0.0, "EF": 0.0, "BW": 0.0, "KP": 0.0, "AB": 0.0},
+                                    "rdkit": {"DKO": 0.0, "SA": 0.0, "PA": 0.0, "EF": 0.0, "BW": 0.0, "KP": 0.0, "AB": 0.0},
+                                    "validated": {"DKO": 0.0, "SA": 0.0, "PA": 0.0, "EF": 0.0, "BW": 0.0, "KP": 0.0, "AB": 0.0},
+                                    "molweight": 0.0,
+                                    "clogp": 0.0,
+                                    "tanimoto_nearest_neighbor": 0.0,
+                                    "tanimoto_nearest_neighbor_similarity": 0.0
                                 }
                             }
                         elif row[0] not in results[accession].keys():
                             results[accession].update({row[0]: {
-                                "rf": {"DKO": "", "SA": "", "PA": "", "EF": "", "BW": "", "KP": "", "AB": ""},
-                                "chemprop": {"DKO": "", "SA": "", "PA": "", "EF": "", "BW": "", "KP": "", "AB": ""},
-                                "rdkit": {"DKO": "", "SA": "", "PA": "", "EF": "", "BW": "", "KP": "", "AB": ""},
-                                "validated": {"DKO": "", "SA": "", "PA": "", "EF": "", "BW": "", "KP": "", "AB": ""},
-                                "molweight": "",
-                                "clogp": "",
-                                "tanimoto_nearest_neighbor": "",
-                                "tanimoto_nearest_neighbor_similarity": ""
+                                "rf": {"DKO": 0.0, "SA": 0.0, "PA": 0.0, "EF": 0.0, "BW": 0.0, "KP": 0.0, "AB": 0.0},
+                                "chemprop": {"DKO": 0.0, "SA": 0.0, "PA": 0.0, "EF": 0.0, "BW": 0.0, "KP": 0.0, "AB": 0.0},
+                                "rdkit": {"DKO": 0.0, "SA": 0.0, "PA": 0.0, "EF": 0.0, "BW": 0.0, "KP": 0.0, "AB": 0.0},
+                                "validated": {"DKO": 0.0, "SA": 0.0, "PA": 0.0, "EF": 0.0, "BW": 0.0, "KP": 0.0, "AB": 0.0},
+                                "tanimoto_nearest_neighbor": 0.0,
+                                "tanimoto_nearest_neighbor_similarity": 0.0
                             }})
 
                         results[accession][row[0]
@@ -685,8 +721,47 @@ def parse_results(path):
     generate_results_tabular(o_f_path, accession)
 
 
+def pathogen_list(s):
+    """
+
+    This function takes a comma-separated string of pathogens and returns a list of valid pathogens. 
+    If any invalid pathogens are found, it raises an argparse.ArgumentTypeError with a message 
+    indicating the invalid pathogens and the valid options.
+
+    """
+
+    items = [x.strip() for x in s.split(",")]
+    invalid = [x for x in items if x not in VALID_PATHOGENS]
+    if invalid:
+        raise argparse.ArgumentTypeError(
+            f"Invalid pathogen(s): {', '.join(invalid)}. "
+            f"Choose from: {', '.join(VALID_PATHOGENS)}."
+        )
+    return items
+
+
+def model_list(s):
+    """
+
+    This function takes a comma-separated string of models and returns a list of valid models.
+    If any invalid models are found, it raises an argparse.ArgumentTypeError with a message
+    indicating the invalid models and the valid options.
+
+    """
+
+    items = [x.strip() for x in s.split(",")]
+    invalid = [x for x in items if x not in VALID_MODELS]
+    if invalid:
+        raise argparse.ArgumentTypeError(
+            f"Invalid model(s): {', '.join(invalid)}. "
+            f"Choose from: {', '.join(VALID_MODELS)}."
+        )
+    return items
+
+
 def main():
     """
+
     This script is the main entry point for the ESKAPE model. It takes an input file with SMILES, runs the predictions using the trained models, and saves the results in a specified output directory. The script also calculates additional properties such as molecular weight, clogP, and Tanimoto nearest neighbor similarity using the chemfunc package. The results are saved in a JSON file and a tabular TSV file for easy analysis.
 
     """
@@ -702,7 +777,20 @@ def main():
                         action="store_true", help="debug mode")
     parser.add_argument('-v', '--version',
                         action="version", version=__version__)
-
+    parser.add_argument('--pathogen_list', dest="pathogen_list", type=pathogen_list,
+                        help=(
+                            "Comma-separated list of pathogens to run predictions on "
+                            f"({', '.join(VALID_PATHOGENS)}). "
+                            "If not specified, all pathogens will be run."
+                        ),
+                        )
+    parser.add_argument('--model_list', dest="model_list", type=model_list,
+                        help=(
+                            "Comma-separated list of models to run predictions on "
+                            f"({', '.join(VALID_MODELS)}). "
+                            "If not specified, all models will be run."
+                        ),
+                        )
     if len(sys.argv) == 1:
         sys.stderr.write("No arguments provided, printing help menu ...\n")
         parser.print_help()

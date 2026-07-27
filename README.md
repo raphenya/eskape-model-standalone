@@ -135,3 +135,20 @@ eskape_model \
 --models_directory db \
 --debug > run.log 2>&1 &
 ```
+
+# Run eskape_model using selected model list and pathogen list
+
+Please note that both `--pathogen_list` and `--model_list` must be specified to run predictions on a subset. 
+Otherwise, predictions will be run for all pathogens using all available models.
+
+Run example command inside the created environment (`eskape_env`):
+
+```
+eskape_model \
+--input_file input.txt \
+--output_directory output \
+--models_directory db \
+--pathogen_list "AB,KP" \
+--model_list "rf" \
+--debug > run.log 2>&1 &
+```
