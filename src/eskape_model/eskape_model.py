@@ -15,6 +15,8 @@ import operator
 import argparse
 from importlib.metadata import version
 
+import torch
+
 __version__ = version("eskape_model")
 
 # explicit paths to chemprop_predict and sklearn_predict
@@ -55,9 +57,40 @@ def run_random_forest_models(test_path, checkpoint_dir, preds_path):
 
     """
     logger.info("run_random_forest_models ...")
+
+    cuda_visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES")
+    cmd = []
+    cuda_available = torch.cuda.is_available()
+    logger.info(f"CUDA_VISIBLE_DEVICES: {cuda_visible_devices}")
+    logger.info(f"cuda_available: {cuda_available}")
+
+    if cuda_visible_devices is not None and cuda_available:
+        if torch.cuda.is_available():
+            env = os.environ.copy()
+            device = env["CUDA_VISIBLE_DEVICES"]
+            logger.info(f"run_chemprop_rdkit_models running on: {device}")
+            cmd = [
+                path_to_sklearn_predict,
+                "--test_path", test_path,
+                "--checkpoint_dir", checkpoint_dir,
+                "--preds_path", preds_path,
+                "--gpu", device
+            ]
+    else:
+        cmd = [
+            path_to_sklearn_predict,
+            "--test_path", test_path,
+            "--checkpoint_dir", checkpoint_dir,
+            "--preds_path", preds_path,
+            "--no_cuda"
+        ]
     try:
         result = subprocess.run(
-            f"{path_to_sklearn_predict} --test_path {test_path} --checkpoint_dir {checkpoint_dir} --preds_path {preds_path}", shell=True, check=True, capture_output=True)
+            cmd,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
         # success
         if result.returncode == 0:
             logger.info("Success")
@@ -66,7 +99,7 @@ def run_random_forest_models(test_path, checkpoint_dir, preds_path):
             logger.info("Fail")
             return False
     except subprocess.CalledProcessError as e:
-        logger.info("Fail")
+        logger.error(e.stderr)
         return False
 
 
@@ -78,9 +111,42 @@ def run_chemprop_models(test_path, checkpoint_dir, preds_path):
 
     """
     logger.info("run_chemprop_models ...")
+
+    cuda_visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES")
+    cmd = []
+    cuda_available = torch.cuda.is_available()
+    logger.info(f"CUDA_VISIBLE_DEVICES: {cuda_visible_devices}")
+    logger.info(f"cuda_available: {cuda_available}")
+
+    if cuda_visible_devices is not None and cuda_available:
+        if torch.cuda.is_available():
+            env = os.environ.copy()
+            device = env["CUDA_VISIBLE_DEVICES"]
+            logger.info(f"run_chemprop_rdkit_models running on: {device}")
+            cmd = [
+                path_to_chemprop_predict,
+                "--individual_ensemble_predictions",
+                "--test_path", test_path,
+                "--checkpoint_dir", checkpoint_dir,
+                "--preds_path", preds_path,
+                "--gpu", device
+            ]
+    else:
+        cmd = [
+            path_to_chemprop_predict,
+            "--individual_ensemble_predictions",
+            "--test_path", test_path,
+            "--checkpoint_dir", checkpoint_dir,
+            "--preds_path", preds_path,
+            "--no_cuda"
+        ]
     try:
         result = subprocess.run(
-            f"{path_to_chemprop_predict} --individual_ensemble_predictions --test_path {test_path} --checkpoint_dir {checkpoint_dir} --preds_path {preds_path}", shell=True, check=True, capture_output=True)
+            cmd,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
         # success
         if result.returncode == 0:
             logger.info("Success")
@@ -89,7 +155,7 @@ def run_chemprop_models(test_path, checkpoint_dir, preds_path):
             logger.info("Fail")
             return False
     except subprocess.CalledProcessError as e:
-        logger.info("Fail")
+        logger.error(e.stderr)
         return False
 
 
@@ -102,9 +168,46 @@ def run_chemprop_rdkit_models(test_path, checkpoint_dir, preds_path):
 
     """
     logger.info("run_chemprop_rdkit_models ...")
-    try:
-        result = subprocess.run(f"{path_to_chemprop_predict} --individual_ensemble_predictions --test_path {test_path} --checkpoint_dir {checkpoint_dir} --preds_path {preds_path} --features_generator rdkit_2d_normalized --no_features_scaling", shell=True, check=True, capture_output=True)
 
+    cuda_visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES")
+    cmd = []
+    cuda_available = torch.cuda.is_available()
+    logger.info(f"CUDA_VISIBLE_DEVICES: {cuda_visible_devices}")
+    logger.info(f"cuda_available: {cuda_available}")
+
+    if cuda_visible_devices is not None and cuda_available:
+        if torch.cuda.is_available():
+            env = os.environ.copy()
+            device = env["CUDA_VISIBLE_DEVICES"]
+            logger.info(f"run_chemprop_rdkit_models running on: {device}")
+            cmd = [
+                path_to_chemprop_predict,
+                "--individual_ensemble_predictions",
+                "--test_path", test_path,
+                "--checkpoint_dir", checkpoint_dir,
+                "--preds_path", preds_path,
+                "--features_generator", "rdkit_2d_normalized",
+                "--no_features_scaling",
+                "--gpu", device
+            ]
+    else:
+        cmd = [
+            path_to_chemprop_predict,
+            "--individual_ensemble_predictions",
+            "--test_path", test_path,
+            "--checkpoint_dir", checkpoint_dir,
+            "--preds_path", preds_path,
+            "--features_generator", "rdkit_2d_normalized",
+            "--no_features_scaling",
+            "--no_cuda"
+        ]
+    try:
+        result = subprocess.run(
+            cmd,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
         # success
         if result.returncode == 0:
             logger.info("Success")
@@ -113,7 +216,7 @@ def run_chemprop_rdkit_models(test_path, checkpoint_dir, preds_path):
             logger.info("Fail")
             return False
     except subprocess.CalledProcessError as e:
-        logger.info(f"Fail")
+        logger.error(e.stderr)
         return False
 
 

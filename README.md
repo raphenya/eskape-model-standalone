@@ -152,3 +152,18 @@ eskape_model \
 --model_list "rf" \
 --debug > run.log 2>&1 &
 ```
+
+# Run eskape_model using GPU
+
+Please note that chemprop `version 1.6.1` supports only 1 GPU and looks for index 0.
+
+```
+CUDA_VISIBLE_DEVICES=0 \
+eskape_model \
+--input_file input.txt \
+--output_directory output \
+--models_directory db --debug \
+--pathogen_list "KP" \
+--model_list "rdkit,rf,chemprop" \
+> run-1.log 2>&1
+```
