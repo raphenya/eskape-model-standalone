@@ -14,8 +14,8 @@ import pandas as pd
 import operator
 import argparse
 from importlib.metadata import version
-
 import torch
+from eskape_model import sanitize
 
 __version__ = version("eskape_model")
 
@@ -292,6 +292,25 @@ def predict_function(args):
         logger.info(f"Folder '{output_directory}' was created")
 
     preds_path = os.path.join(output_directory, filename)
+
+    logger.info(f"Sanitizing input data ...")
+
+    base_name = os.path.splitext(os.path.basename(filename))[0]
+
+    sanitized_path = os.path.join(
+        output_directory, f"{base_name}_sanitized.txt")
+    errors_path = os.path.join(
+        output_directory, f"{base_name}_errors.txt")
+
+    msg_count = sanitize.sanitize(test_path, sanitized_path, errors_path)
+    logger.info(f"Sanitization complete. {msg_count} error(s).")
+
+    # use sanitized data for predictions
+    test_path = sanitized_path
+    preds_path = sanitized_path
+
+    logger.info(f"Sanitized data saved to {sanitized_path}")
+    logger.info(f"Use sanitized data saved to {test_path} for predictions")
 
     # calculate TNN (Tanimoto nearest neighbour) metric
     # TNN script: https://github.com/swansonk14/chemfunc/blob/main/src/chemfunc/nearest_neighbor.py

@@ -35,6 +35,67 @@ Results are outputted as a TSV file containing the following:
   - Molecular weight: Size of the molecule in g/mol
   - clogP: Calculated octanol-water partition coefficient, where high clogP values mean the compound is more lipophilic. clogP is an important metric for solubility and bioavailability.
   - TNN: The TNN similarity measures the structural similarity (value between 0-1) of an input molecule to the most similar molecule (nearest neighbour) from the training set. TNN similarity closer to 1 indicates the molecules are more similar (TNN similarity = 1 means the molecules are equal). Predictions on compounds that are more similar to the training set are likely to be more accurate. Nearest neighbor SMILES from the training set are included in the TSV.
+### Output files:
+
+#### `<INPUT-FILENAME>_sanitized.txt-final.tsv` and `<INPUT-FILENAME>_sanitized.txt-final.json` summary files
+
+The final results are saved to a JSON and TSV files, containing the fields detailed in the table below:
+
+| Field | Description |
+| ------ | ------ |
+| smiles     |  The molecule representation in SMILES format.      |
+| molecular_weight    |  Size of the molecule in g/mol      |
+| clogp | The calculated octanol-water partition coefficient, where high clogP values mean the compound is more lipophilic. clogP is an important metric for solubility and bioavailability. | 
+| sum_rdkit | The sum of prediction scores for rdkit from all pathogen models for one compound. This metric can be used to prioritize broad-spectrum antibacterial compounds. |
+| sum_chemprop | The sum of prediction scores for chemprop from all pathogen models for one compound. This metric can be used to prioritize broad-spectrum antibacterial compounds. |
+| sum_rf | The sum of prediction scores for random forest from all pathogen models for one compound. This metric can be used to prioritize broad-spectrum antibacterial compounds. |
+| ppf_rdkit | The ratio of the highest prediction score for a compound (PS1) to the second highest (PS2). This metric can be used to prioritize pathogen-prioritized antibacterial compounds. Calculated for rdkit models. |
+| ppf_chemprop | The ratio of the highest prediction score for a compound (PS1) to the second highest (PS2). This metric can be used to prioritize pathogen-prioritized antibacterial compounds.  Calculated for chemprop models. |
+| ppf_rf | The ratio of the highest prediction score for a compound (PS1) to the second highest (PS2). This metric can be used to prioritize pathogen-prioritized antibacterial compounds.  Calculated for random forest models. |
+| ef_rdkit | A prediction score between 0 and 1 that denotes how confident the rdkit model is that a molecule is antibacterial for <i>Enterococcus faecium</i>. |
+| ef_chemprop | A prediction score between 0 and 1 that denotes how confident the chemprop model is that a molecule is antibacterial for <i>Enterococcus faecium</i>. |
+| ef_rf | A prediction score between 0 and 1 that denotes how confident the rf model is that a molecule is antibacterial for <i>Enterococcus faecium</i>.  |
+| sa_rdkit | A prediction score between 0 and 1 that denotes how confident the rdkit model is that a molecule is antibacterial for <i>Staphylococcus aureus</i>.  |
+| sa_chemprop | A prediction score between 0 and 1 that denotes how confident the chemprop model is that a molecule is antibacterial for <i>Staphylococcus aureus</i>. |
+| sa_rf | A prediction score between 0 and 1 that denotes how confident the rf model is that a molecule is antibacterial for <i>Staphylococcus aureus</i>.  |
+| kp_rdkit | A prediction score between 0 and 1 that denotes how confident the rdkit model is that a molecule is antibacterial for <i>Klebsiella pneumoniae</i>.  |
+| kp_chemprop | A prediction score between 0 and 1 that denotes how confident the chemprop model is that a molecule is antibacterial for <i>Klebsiella pneumoniae</i>.  |
+| kp_rf | A prediction score between 0 and 1 that denotes how confident the rf model is that a molecule is antibacterial for <i>Klebsiella pneumoniae</i>.  |
+| ab_rdkit | A prediction score between 0 and 1 that denotes how confident the rdkit model is that a molecule is antibacterial for <i>Acinetobacter baumannii</i>.  |
+| ab_chemprop | A prediction score between 0 and 1 that denotes how confident the chemprop model is that a molecule is antibacterial for <i>Acinetobacter baumannii</i>.  |
+| ab_rf | A prediction score between 0 and 1 that denotes how confident the rf model is that a molecule is antibacterial for <i>Acinetobacter baumannii</i>.  |
+| pa_rdkit | A prediction score between 0 and 1 that denotes how confident the rdkit model is that a molecule is antibacterial for <i>Pseudomonas aeruginosa</i>.  |
+| pa_chemprop | A prediction score between 0 and 1 that denotes how confident the chemprop model is that a molecule is antibacterial for <i>Pseudomonas aeruginosa</i>.  |
+| pa_rf | A prediction score between 0 and 1 that denotes how confident the rf model is that a molecule is antibacterial for <i>Pseudomonas aeruginosa</i>.  |
+| bw_rdkit | A prediction score between 0 and 1 that denotes how confident the rdkit model is that a molecule is antibacterial for <i>Escherichia coli</i> (wildtype).  |
+| bw_chemprop | A prediction score between 0 and 1 that denotes how confident the chemprop model is that a molecule is antibacterial for <i>Escherichia coli</i> (wildtype). |
+| bw_rf | A prediction score between 0 and 1 that denotes how confident the rf model is that a molecule is antibacterial for <i>Escherichia coli</i> (wildtype). |
+| dko_rdkit | A prediction score between 0 and 1 that denotes how confident the rdkit model is that a molecule is antibacterial for <i>Escherichia coli </i> (hyperpermeable and efflux deficient).  |
+| dko_chemprop | A prediction score between 0 and 1 that denotes how confident the chemprop model is that a molecule is antibacterial for <i>Escherichia coli </i> (hyperpermeable and efflux deficient).   |
+| dko_rf | A prediction score between 0 and 1 that denotes how confident the rf model is that a molecule is antibacterial for <i>Escherichia coli </i> (hyperpermeable and efflux deficient).  |
+| ef_validated | The experimental optical density (OD) values for input compounds that were tested against the <i>Enterococcus faecium</i> pathogen during training data acquisition. |
+| sa_validated	 | The experimental optical density (OD) values for input compounds that were tested against the <i>Staphylococcus aureus</i> pathogen during training data acquisition. |
+| kp_validated	 | The experimental optical density (OD) values for input compounds that were tested against the <i>Klebsiella pneumoniae</i> pathogen during training data acquisition. |
+| ab_validated	 | The experimental optical density (OD) values for input compounds that were tested against the <i>Acinetobacter baumannii</i> pathogen during training data acquisition. |
+| pa_validated	 | The experimental optical density (OD) values for input compounds that were tested against the <i>Pseudomonas aeruginosa</i> pathogen during training data acquisition. |
+| bw_validated	 | The experimental optical density (OD) values for input compounds that were tested against the <i>Escherichia coli</i> (wildtype) pathogen during training data acquisition. |
+| dko_validated	 | The experimental optical density (OD) values for input compounds that were tested against the <i>Escherichia coli</i> (hyperpermeable and efflux deficient) pathogen during training data acquisition. |
+| tanimoto_nearest_neighbor	 | Nearest neighbor SMILES from the training set. |
+| tanimoto_nearest_neighbor_similarity | The TNN similarity measures the structural similarity (value between 0-1) of an input molecule to the most similar molecule (nearest neighbour) from the training set. TNN similarity closer to 1 indicates the molecules are more similar (TNN similarity = 1 means the molecules are equal). |
+[Table 1: rf - random forest]
+
+### Other output files.
+
+| File | Description |
+| ------ | ------ |
+| `<INPUT-FILENAME>_errors.txt` | Contains invalid SMILES. |
+| `<INPUT-FILENAME>_sanitized.txt` | Contains valid SMILES. | 
+| `<INPUT-FILENAME>_sanitized.txt-nearest-neighbor.txt` | Contains nearest neighbor caluculations results. |
+| `<INPUT-FILENAME>_sanitized.txt-properties.txt` | Contains properties calculations results i.e., mol_weight,clogp |
+| `<INPUT-FILENAME>_sanitized.txt-canonical.txt` | Contains canonical SMILES. |
+| `<INPUT-FILENAME>_sanitized.txt-validated.txt` | A prediction scores for training data. |
+| `<INPUT-FILENAME>_sanitized.txt.json` | Temporary JSON for summary results. |
+| `<INPUT-FILENAME>_sanitized.txt-<PATHOGEN>_<MODEL-TYPE>.csv` | A prediction scores for `<PATHOGEN>` using `<MODEL-TYPE>` model | 
 
 ### Interpretation:
 
@@ -72,6 +133,7 @@ The following are required dependencies (listed below):
 - scikit-learn==1.3.2
 - numpy==1.26.4
 - torch==2.2.2
+- typed-argument-parser version 1.11.0 - https://github.com/swansonk14/typed-argument-parser.git
 
 
 ## test functions
