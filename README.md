@@ -121,7 +121,7 @@ source eskape_env/bin/activate
 The latest release can be installed directly from pip which will also install the dependencies `chemprop` and `chemfunc`.
 
 ```
-pip install eskape_model==1.0.3
+pip install eskape_model==1.0.4
 ```
 
 # Dependencies
